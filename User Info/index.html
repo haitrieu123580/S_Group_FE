@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Info</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .input-text {
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin: 8px 0;
+            padding: 10px 6px;
+            position: relative;
+        }
+        input[type="text"],option,select{
+            outline: none;
+            color: #333;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main" class="bg-gray-400 w-full p-10">
+        <div class="container block bg-white rounded py-4 w-10/12 mx-auto">
+            <div class="header-container px-6 border-b border-gray-300">
+                <h2><b>Account Detail</b></h2>
+                <div class="mt-4 avatar-container flex  pb-4">
+                    <img :src="user.avatar" alt="" class="rounded w-20">
+                    <div class="upload-avatar flex flex-col justify-between ml-2">
+                        <button class="inline-block bg-green-400 p-2 rounded text-white">Upload new photo</button>
+                        <p>Allowed JPG, GIF. Max size of 800K</p>
+                    </div>
+                </div>
+            </div>
+            <div class="conatainer px-8 py-4">
+                <div class="flex input-text items-center">
+                    <i class="fa-solid fa-envelope text-gray-400 pr-2"></i>
+                    <input type="text" v-model="user.name" ref="name">
+                </div>
+                <div class="flex input-text items-center">
+                    <i class="fa-solid fa-envelope text-gray-400 pr-2"></i>
+                    <input type="text" v-model="user.email" ref="email">
+                </div>
+                <div class="flex input-text items-center">
+                    <i class="fa-solid fa-envelope text-gray-400 pr-2"></i>
+                    <select v-model="user.address">
+                        <option disabled value="">Please select one</option>
+                        <option>Quang Tri</option>
+                        <option>Da Nang</option>
+                        <option>Hue</option>
+                    </select>
+                </div>
+                <div class="border border-gray-300 rounded py-4 px-8 mb-2">
+                    <div class="check-box-container w-full flex justify-between" v-for="value in major">
+                        <label :for="value">{{value}}</label>
+                        <input type="checkbox" :id="value" :value="value" v-model="user.major">
+                    </div>
+                </div>
+                <div class="border border-gray-300 rounded py-4 px-8 mb-2">
+                    <div class="check-box-container w-full flex justify-between" v-for="value in gender">
+                        <label :for="value">{{value}}</label>
+                        <input type="radio" :id="value" :value="value" v-model="user.gender">
+                    </div>
+                </div>
+                <div class="button-are flex gap-2 mt-6">
+                    <button @click="saveChange()"
+                        class="p-2 inline-block rounded font-medium text-white bg-green-400 ">SAVE CHANGE</button>
+                    <button @click="resetUserData()"
+                        class="p-2 inline-block rounded font-medium text-white bg-gray-300 ">RESET</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const { createApp } = Vue
+        createApp({
+            methods: {
+                resetUserData() {
+                    this.user = JSON.parse(JSON.stringify(this.userRaw));
+                },
+                saveChange() {
+                    this.userRaw = JSON.parse(JSON.stringify(this.user))
+                }
+            },
+            computed: {
+            },
+            data() {
+                return {
+                    user: {},
+                    userRaw: {
+                        name: "User",
+                        email: "User@gmail.com",
+                        avatar: "https://i.pravatar.cc/300",
+                        address: 'Da Nang',
+                        major: ['IT'],
+                        gender: 'Male',
+                    },
+                    gender: ['Male', 'Female', 'Other'],
+                    major: ['IT', 'DS', 'MO']
+                }
+            },
+            mounted() {
+                this.resetUserData()
+            }
+        }).mount('#main')
+    </script>
+</body>
+
+</html>
