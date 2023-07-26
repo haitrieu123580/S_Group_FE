@@ -72,7 +72,7 @@
                 <div class="button-are flex gap-2 mt-6">
                     <button @click="saveChange()"
                         class="p-2 inline-block rounded font-medium text-white bg-green-400 ">SAVE CHANGE</button>
-                    <button @click="resetUserData()"
+                    <button @click="reset()"
                         class="p-2 inline-block rounded font-medium text-white bg-gray-300 ">RESET</button>
                 </div>
             </div>
@@ -82,7 +82,7 @@
         const { createApp } = Vue
         createApp({
             methods: {
-                resetUserData() {
+                reset() {
                     this.user = JSON.parse(JSON.stringify(this.userRaw));
                 },
                 saveChange() {
@@ -107,7 +107,7 @@
                 }
             },
             mounted() {
-                this.resetUserData()
+                this.reset()
             }
         }).mount('#main')
     </script>
