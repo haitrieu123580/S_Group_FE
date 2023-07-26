@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise 1</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .red {
+            background-color: red;
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .nav {
+            display: flex;
+            margin: auto;
+            max-width: 50em;
+            justify-content: space-between;
+        }
+        
+        li {
+            text-decoration: none;
+            list-style: none;
+            padding: 10px;
+            margin-right: 10px;
+        }
+        
+        #app {
+            margin: 20em 20em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <ul class="nav">
+            <li v-for="item in items" :class="{ 'red': selectedItem !== item, 'green': selectedItem === item }"
+                @click="selectItem(item)">
+                {{ item.name }}
+            </li>
+        </ul>
+        <h3>YOU ARE CHOOSING <span style="background-color: antiquewhite;">{{ selectedItem ? selectedItem.name : '' }}</span></h3>
+    </div>
+    <script>
+        const { createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    selectedItem: null,
+                    items: [
+                        {
+                            name: 'HOME'
+                        },
+                        {
+                            name: 'ABOUT'
+                        },
+                        {
+                            name: 'SERVICES'
+                        },
+                        {
+                            name: 'CONTACT'
+                        }
+                    ]
+                }
+            },
+            methods: {
+                selectItem(item) {
+                    this.selectedItem = item;
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+
+</html>

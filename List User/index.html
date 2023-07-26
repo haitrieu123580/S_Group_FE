@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+    <div id='app'>
+        <!-- component -->
+        <link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css">
+        <link rel="stylesheet"
+            href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
+
+
+        <section class="py-1 bg-blueGray-50">
+            <div class="w-full xl:w-8/12 mb-12 xl:mb-0 px-4 mx-auto mt-24">
+                <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded ">
+                    <div class="rounded-t mb-0 px-4 py-3 border-0">
+                        <div class="flex flex-wrap items-center">
+                            <div class="relative mb-3" data-te-input-wrapper-init>
+                                <input type="search"
+                                    class="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+                                    id="exampleSearch2" placeholder="Type query" v-model="searchQuery" />
+                                <label for="exampleSearch2"
+                                    class="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Search</label>
+                            </div>
+                            <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
+                                <button
+                                    class="bg-indigo-500  active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                                    type="button"> Create New</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="block w-full overflow-x-auto">
+                        <table class="items-center bg-transparent w-full border-collapse ">
+                            <thead class="text-xs text-gray-700 uppercase py-4 bg-white">
+
+                                <tr scope="col" class="px-6 py-3  bg-white">
+                                    <th v-for="(column,index) in tableColumns" :key="index"
+                                        class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+                                        {{column}}
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+                                <tr v-for="user in resultQuery">
+                                    <td
+                                        class="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                        <div class="flex items-center">
+                                            <img class="w-14 rounded-full" :src="user.avatar" alt="avatar"
+                                                class="w-8 h-8 rounded-full">
+                                            <div class="mx-3">
+                                                <p>{{ user.name }}</p>
+                                                <b>{{user.email}}</b>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td
+                                        class="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                        {{user.role}}
+                                    </td>
+                                    <td
+                                        class="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                        <span class="rounded px-2 py-2 text-white"
+                                            :class="user.status == 'active'? 'bg-green-400' : 'bg-red-400'">{{
+                                            user.status}}</span>
+
+                                    </td>
+                                    <td
+                                        class="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                        {{user.lastActivity}}
+                                    </td>
+                                    <td
+                                        class="border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                        {{user.joinDate}}
+                                    </td>
+                                    <td
+                                        class="relative border-t-0 px-6 align-center border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+                                        <button type="button"
+                                        @click="showPopup(user.id)"
+                                            class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white rounded-md bg-gray-500 hover:bg-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                                            Actions
+                                           
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                class="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 9l-7 7-7-7"></path>
+                                            </svg>
+                                        </button>
+                                        <div :id="'action-' + user.id" data-display="none"
+                                            class="popup hidden absolute right-0 w-32 mt-1 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50 focus:outline-none">
+                                            <div class="px-1 py-1 popup">
+                                                <button
+                                                    class="popup hover:bg-gray-400 hover:text-white text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="popup w-5 h-5 mr-2 text-violet-400" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                                        </path>
+                                                    </svg>
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    class="popup hover:bg-red-400 hover:text-white text-gray-900 group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                                                    @click="onDelete(user.id)">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="popup w-5 h-5 mr-2 text-violet-400" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                        </path>
+                                                    </svg>
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <footer class="relative pt-8 pb-6 mt-16">
+                <div class="container mx-auto px-4">
+                    <div class="flex flex-wrap items-center md:justify-between justify-center">
+                        <div class="w-full md:w-6/12 px-4 mx-auto text-center">
+                            <div class="text-sm text-blueGray-500 font-semibold py-1">
+                                Made by Trieu
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </section>
+    </div>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    tableColumns: [
+                        "user",
+                        "role",
+                        "status",
+                        "last activity",
+                        "join date",
+                        "actions",
+                    ],
+                    userData: [
+                        {
+                            id: 1,
+                            name: "John Doe",
+                            email: "johnDoe@gmail.com",
+                            avatar: "https://i.pravatar.cc/300",
+                            role: "admin",
+                            status: "active",
+                            lastActivity: "1 min ago",
+                            joinDate: "2023-06-16T02:56:02.677Z",
+                        },
+                        {
+                            id: 2,
+                            name: "John User",
+                            email: "johnDoe@gmail.com",
+                            avatar: "https://i.pravatar.cc/300",
+                            role: "user",
+                            status: "suspended",
+                            lastActivity: "1 min ago",
+                            joinDate: "2023-06-16T02:56:02.677Z",
+                        },
+                        {
+                            id: 3,
+                            name: "John Admin",
+                            email: "johnDoe@gmail.com",
+                            avatar: "https://i.pravatar.cc/300",
+                            role: "admin",
+                            status: "active",
+                            lastActivity: "1 min ago",
+                            joinDate: "2023-06-16T02:56:02.677Z",
+                        },
+                    ],
+                    searchQuery: '',
+                    
+                };
+            },
+            computed: {
+                resultQuery() {
+                    if (this.searchQuery) {
+                        return this.userData.filter((item) => {
+                            return this.searchQuery.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
+                        })
+                    } else {
+                        return this.userData;
+                    }
+                },
+
+            },
+            mounted() {
+                // Add a click event listener to the document
+                document.addEventListener("click", this.documentClickHandler);
+            },
+            beforeUnmount() {
+                // Remove the event listener when the component is unmounted to avoid memory leaks
+                document.removeEventListener("click", this.documentClickHandler);
+            },
+            methods: {
+                closeAllPopup() {
+                    var popups = document.querySelectorAll('td.relative > div');
+                    popups.forEach(p => p.style.display = "none");
+                },
+                autoClosePopup(e) {
+                    if (e.target.classList.contains('popup')) return;
+                    this.closeAllPopup()
+        
+                },
+                showPopup(id) {
+                    this.closeAllPopup()
+                    var popup = document.querySelector("#action-" + id)
+                    if (popup.dataset.display == "none") {
+                        popup.style.display = "block"
+                        popup.dataset.display = "block"
+                    } else {
+                        popup.style.display = "none"
+                        popup.dataset.display = "none"
+                    }
+                },
+                onDelete(id) {
+                    console.log(typeof id);
+                    this.userData = this.userData.filter(u => u.id !== id)
+                    this.closeAllPopup();
+                },
+                filterUser(id) {
+                    this.userData = this.userData.filter(u => u.id !== id)
+                },
+                documentClickHandler(e) {
+                    // Check if the clicked element is inside the popup or the button itself
+                    if (!e.target.closest('.popup') && e.target.tagName !== 'BUTTON') {
+                        // If clicked outside of the popup and not the button, close all popups
+                        this.closeAllPopup();
+                    }
+                },
+            },
+
+        });
+
+        app.mount("#app");
+    </script>
+</body>
+
+</html>
