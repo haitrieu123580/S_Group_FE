@@ -23,11 +23,14 @@
             color: #333;
             width: 100%;
         }
+        .input-error{
+            border: 1px solid red;
+        }
     </style>
 </head>
 
 <body>
-    <div id="main" class="bg-gray-400 w-full p-10">
+    <div id="app" class="bg-gray-400 w-full p-10">
         <div class="container block bg-white rounded py-4 w-10/12 mx-auto">
             <div class="header-container px-6 border-b border-gray-300">
                 <h2><b>Account Detail</b></h2>
@@ -42,27 +45,28 @@
             <div class="conatainer px-8 py-4">
                 <div class="flex input-text items-center">
                     <i class="fa-solid fa-envelope text-gray-400 pr-2"></i>
-                    <input type="text" v-model="user.name" ref="name">
+                    <input type="text" v-model="user.name" ref="name" placeholder="User name">
                 </div>
                 <div class="flex input-text items-center">
                     <i class="fa-solid fa-envelope text-gray-400 pr-2"></i>
-                    <input type="text" v-model="user.email" ref="email">
+                    <input type="text" v-model="user.email" ref="email" placeholder="email">
                 </div>
                 <div class="flex input-text items-center">
                     <i class="fa-solid fa-envelope text-gray-400 pr-2"></i>
                     <select v-model="user.address">
-                        <option disabled value="">Please select one</option>
+                        <option value="">Please select one</option>
                         <option>Quang Tri</option>
                         <option>Da Nang</option>
                         <option>Hue</option>
                     </select>
                 </div>
                 <div class="border border-gray-300 rounded py-4 px-8 mb-2">
-                    <div class="check-box-container w-full flex justify-between" v-for="value in major">
+                    <div class="check-box-container w-full flex justify-between" v-for="value in major" :key="value">
                         <label :for="value">{{value}}</label>
                         <input type="checkbox" :id="value" :value="value" v-model="user.major">
                     </div>
                 </div>
+                
                 <div class="border border-gray-300 rounded py-4 px-8 mb-2">
                     <div class="check-box-container w-full flex justify-between" v-for="value in gender">
                         <label :for="value">{{value}}</label>
@@ -81,36 +85,77 @@
     <script>
         const { createApp } = Vue
         createApp({
-            methods: {
-                reset() {
-                    this.user = JSON.parse(JSON.stringify(this.userRaw));
-                },
-                saveChange() {
-                    this.userRaw = JSON.parse(JSON.stringify(this.user))
-                }
-            },
+           
             computed: {
             },
             data() {
                 return {
                     user: {},
-                    userRaw: {
-                        name: "User",
-                        email: "User@gmail.com",
-                        avatar: "https://i.pravatar.cc/300",
-                        address: 'Da Nang',
-                        major: ['IT'],
-                        gender: 'Male',
-                    },
+     
                     gender: ['Male', 'Female', 'Other'],
                     major: ['IT', 'DS', 'MO']
                 }
             },
             mounted() {
                 this.reset()
-            }
-        }).mount('#main')
+            },
+            methods: {
+                reset() {
+                    this.user ={
+                        email: '',
+                        gender: '',
+                        address: '',
+                        name: '',
+                        major: []
+                    }
+                },
+                saveChange() {
+                    if(this.user.name === ''){
+                        alert('input name plz')
+                        return;
+                    }
+                    if (!this.validateEmail(this.user.email)) {
+                        alert('check mail again')
+                        return;
+                    }
+                    if(!this.user.gender){
+                        alert('choose gender')
+                        return;
+                    }
+                    if(!this.validateAddress(this.user.address)){
+                        alert('chooose city')
+                        return;
+                    }
+                    if(!this.validateMajor(this.user.major)){
+                        alert('choose major');
+                        return;
+                    }
+                    else{
+                        const body ={
+                            name: this.user.name, 
+                            email: this.user.email, 
+                            address: this.user.address, 
+                            major: this.user.major, 
+                            gender: this.user.gender
+                        }
+                        alert(
+                            JSON.stringify(body)
+                        )
+                    }  
+                },
+                validateEmail(email) {
+                    // Regular expression for email validation
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return emailPattern.test(email);
+                },
+                validateAddress(address){
+                    return this.user.address
+                }, 
+                validateMajor(major){
+                    return this.user.major.length > 0; 
+                }
+            },
+        }).mount('#app')
     </script>
 </body>
-
 </html>
