@@ -1,4 +1,5 @@
 <script setup>
+import { RouterView } from 'vue-router';
 import LoginForm from './components/LoginForm/LoginForm.vue';
 </script>
 
@@ -7,8 +8,7 @@ import LoginForm from './components/LoginForm/LoginForm.vue';
 
   </header>
   <main>
-    <notifications />
-    <LoginForm/>
+    <RouterView></RouterView>
   </main>
     
 </template>
