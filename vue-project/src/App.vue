@@ -1,14 +1,13 @@
 <script setup>
-import LoginForm from './components/LoginForm/LoginForm.vue';
+import { RouterView } from 'vue-router';
+import { useNotification } from "@kyvg/vue3-notification";
+
+const { notify } = useNotification()
 </script>
 
 <template>
-  <header>
-
-  </header>
   <main>
     <notifications />
-    <LoginForm/>
+    <RouterView></RouterView>
   </main>
-    
 </template>
