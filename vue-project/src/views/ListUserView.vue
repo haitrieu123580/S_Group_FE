@@ -1,36 +1,69 @@
 <template>
-  <div class="container">
-    <div class="content">
-      <div class="content-header flex justify-between">
-        <input type="search" placeholder="Search User" class="border-2 px-2 py-2" v-model="searchQuery" />
-        <button class="btn btn-add bg-blue-700 text-white px-3 py-3 rounded hover:bg-blue-600">
-          + Create New
-        </button>
-      </div>
-      <!-- <div class="content-body mt-10">
-        <div v-for="user in users" :key="user.id">
-          <UserCard :user="user" />
-        </div>
-      </div> -->
-      <table class=" w-3/4 mt-6 mx-auto text-left">
-        <thead class="text-xs text-gray-700 uppercase py-4 bg-white">
-          <tr scope="col" class="px-6 py-3  bg-white">
-            <th v-for="(column, index) in tableColumns" :key="index">
-              {{ column }}
-            </th>
-          </tr>
-        </thead>
-        <tr v-for="user in users" :key="user.id">
+  <div class="mt-8 bg-white p-4 shadow rounded-lg">
+    <h2 class="text-gray-500 text-lg font-semibold pb-4">USERS</h2>
+    <div class="max-h-[40rem] overflow-y-auto">
+      <table class="w-full table-auto text-sm">
+      <thead>
+        <tr
+          class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-left">
+          <th v-for="(column, index) in tableColumns" :key="index">
+            {{ column }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="user in users" :key="user.id" class="hover:bg-grey-lighter">
           <UserCard :user="user" />
         </tr>
-      </table>
+      </tbody>
+    </table>
     </div>
+
+    <!-- Add New User
+    <div class="text-right mt-4">
+      <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded">
+        Add New User
+      </button>
+    </div> -->
+
   </div>
+  <!-- pagination -->
+  <nav aria-label="Page navigation" class="mt-8 bg-white p-4 shadow rounded-lg">
+    <ul class="space-x-2 flex items-center justify-center">
+      <li><button
+          class="flex items-cente justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+            <path
+              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+              clip-rule="evenodd" fill-rule="evenodd"></path>
+          </svg></button>
+      </li>
+      <li><button
+          class="w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">1</button>
+      </li>
+      <li><button
+          class="w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100">2</button>
+      </li>
+      <li><button
+          class="w-10 h-10 text-white transition-colors duration-150 bg-indigo-600 border border-r-0 border-indigo-600 rounded-full focus:shadow-outline">3</button>
+      </li>
+      <li><button
+          class="flex items-center justify-center w-10 h-10 text-indigo-600 transition-colors duration-150 bg-white rounded-full focus:shadow-outline hover:bg-indigo-100">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+            <path
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clip-rule="evenodd" fill-rule="evenodd"></path>
+          </svg></button>
+      </li>
+    </ul>
+  </nav>
 </template>
   
 <script>
 import UserCard from '../components/User/UserCard.vue';
 import axios from 'axios';
+import { ref, } from 'vue';
+const accessToken = ref(localStorage.getItem('accessToken'));
 export default {
   name: 'ListUser',
   components: {
@@ -49,7 +82,12 @@ export default {
     };
   },
   mounted() {
-    axios.get('http://localhost:3000/users/get-users')
+    axios.get('http://localhost:3000/users/get-users',
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken.value.slice(1, -1)}`
+        }
+      })
       .then(response => {
         console.log(response.data.users);
         this.users = response.data.users;
@@ -60,9 +98,7 @@ export default {
   },
 };
 </script>
-<style scoped>
-.container {
+<style scoped>.container {
   padding: 30px 0;
   margin: 0 auto;
-}
-</style>
+}</style>
