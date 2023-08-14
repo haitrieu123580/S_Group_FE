@@ -19,7 +19,7 @@
   </td>
   <td class="py-2 px-4 border-b border-grey-light flex items-stretch">
     <button @click="showUpdateModal(user)"
-    class="rounded-full bg-sky-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-sky-600 active:bg-sky-700 flex items-center">
+    class="rounded-full bg-sky-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-sky-600 active:bg-sky-700 flex items-center mr-2">
       <svg xmlns="http://www.w3.org/2000/svg" class="popup w-5 h-5 mr-2 text-white-400" fill="none" viewBox="0 0 24 24"
         stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -28,9 +28,9 @@
       </svg>
       Edit
     </button>
-    <modal v-if="isShowPopUp" v-model="isShowPopUp" id="updateUser" :user="user">
+    <!-- <modal v-if="isShowPopUp" v-model="isShowPopUp" id="updateUser" :user="user">
       <UpdateModel :user="user" />
-    </modal>
+    </modal> -->
     <button @click="onDelete(user.id)"
     class="rounded-full bg-red-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-red-600 active:bg-re-700 flex items-center">
       <svg xmlns="http://www.w3.org/2000/svg" class="popup w-5 h-5 mr-2 text-white-400" fill="none" viewBox="0 0 24 24"
@@ -48,7 +48,6 @@
 import axios from 'axios';
 import { ref, } from 'vue';
 import { notify } from '@kyvg/vue3-notification';
-import UpdateModel from '../UpdateModel.vue';
 const accessToken = ref(localStorage.getItem('accessToken'));
 export default {
   name: 'UserCard',
@@ -62,6 +61,7 @@ export default {
   methods: {
     async onDelete(id) {
       const bearerToken = accessToken.value.slice(1, -1);
+      // console.log(bearerToken);
       try {
         const response = await axios({
           method: 'delete',

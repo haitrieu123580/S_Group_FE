@@ -1,8 +1,7 @@
 <template>
   <!-- Main navigation container -->
   <nav
-    class="flex-no-wrap relative flex w-full items-center justify-between bg-[#FBFBFB] py-2 shadow-md shadow-black/5 dark:bg-neutral-600 dark:shadow-black/10 lg:flex-wrap lg:justify-start"
-    >
+    class="flex-no-wrap relative flex w-full items-center justify-between bg-[#FBFBFB] py-2 shadow-md shadow-black/5 dark:bg-neutral-600 dark:shadow-black/10 lg:flex-wrap lg:justify-start">
     <div class="flex w-full flex-wrap items-center justify-between px-3">
       <!-- Hamburger button for mobile view -->
       <button
@@ -20,8 +19,9 @@
       </button>
 
       <!-- Collapsible navigation container -->
-      <div class="!visible hidden flex-grow basis-[100%] items-center lg:!flex lg:basis-auto flex-no-wrap relative flex w-full items-center justify-between bg-[#FBFBFB] py-2" id="navbarSupportedContent1"
-        data-te-collapse-item>
+      <div
+        class="!visible hidden flex-grow basis-[100%] items-center lg:!flex lg:basis-auto flex-no-wrap relative flex w-full items-center justify-between bg-[#FBFBFB] py-2"
+        id="navbarSupportedContent1" data-te-collapse-item>
         <!-- Logo -->
         <a class="mb-4 ml-2 mr-5 mt-3 flex items-center text-neutral-900 hover:text-neutral-900 focus:text-neutral-900 dark:text-neutral-200 dark:hover:text-neutral-400 dark:focus:text-neutral-400 lg:mb-0 lg:mt-0"
           href="#">
@@ -36,31 +36,35 @@
           </li>
         </ul>
         <!-- Right elements -->
-        <div class="relative flex items-center">
-          <!-- Ícono de Notificación y Perfil -->
-          <div class="space-x-5">
-            <button class="rounded-full ">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-              </svg>
 
-            </button>
-            <!-- Botón de Perfil -->
-            <button class="rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-              </svg>
-            </button>
-          </div>
+        <div class="flex items-center">
+          <button class="rounded-full mr-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+            </svg>
+
+          </button>
+          <!-- Botón de Perfil -->
+          <button class="rounded-full flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+              stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            {{ username }}
+          </button>
         </div>
       </div>
     </div>
   </nav>
 </template>
 <script setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
+const store = useStore();
+const isLoggedIn = computed(() => !!store.getters.authData.accessToken);
+const username = computed(() => store.getters.authData.username);
 </script>

@@ -29,22 +29,28 @@
 </template>
 
 <script setup>
-import { ref, } from 'vue';
+import { ref, computed, inject, defineProps } from 'vue';
 import { notify } from '@kyvg/vue3-notification';
-import { computed } from 'vue';
 import axios from 'axios';
-import { inject } from 'vue';
-const router = inject('router');
+import { useRouter } from 'vue-router'; // Import đối tượng useRouter
+import { useStore } from 'vuex';
+
+const store = useStore()
+const router = useRouter(); // Khởi tạo đối tượng router
+
 const username = ref('');
 const password = ref('');
 const accessToken = ref(localStorage.getItem('accessToken'));
 const isLoggedIn = computed(() => !!accessToken.value);
+
 const onloginSuccess = () => {
-  window.location.href = "/dashboard";
+  router.push('/dashboard');
 };
+
 const onlogoutSuccess = () => {
-  window.location.href = "/";
+  router.push('/');
 };
+
 const login = async () => {
   try {
     const response = await axios({
@@ -55,17 +61,26 @@ const login = async () => {
         password: password.value
       }
     })
-    console.log(response);
+
     if (response.data.accessToken) {
+      notify({
+        title: 'Success',
+        text: "Login success",
+        type: 'success',
+        duration: 1000
+      });
       localStorage.setItem('accessToken', JSON.stringify(response.data.accessToken));
       accessToken.value = localStorage.getItem('accessToken');
-      console.log('Login successfully');
-      notify({
-      title: 'Success',
-      text: "Login success",
-      type: 'success',
-      duration: 1000});
-      onloginSuccess()
+
+      // Sử dụng mutation để cập nhật authData trong store
+      store.commit('setAuthData', {
+        accessToken: response.data.accessToken,
+        username: response.data.message.username
+      });
+
+      console.log('Login successfully ');
+
+      onloginSuccess();
     }
   } catch (error) {
     console.log(error);
@@ -77,10 +92,11 @@ const login = async () => {
     });
   }
 };
+
 const logout = () => {
   try {
     localStorage.removeItem('accessToken');
-    accessToken.value = null
+    accessToken.value = null;
     notify({
       title: 'Success',
       text: "Logout success",
@@ -136,4 +152,5 @@ button {
   border-radius: 4px;
   background-color: #eee;
   cursor: pointer;
-}</style>
+}
+</style>

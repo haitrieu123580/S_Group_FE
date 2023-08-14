@@ -1,30 +1,34 @@
 <template>
   <div class="mt-8 bg-white p-4 shadow rounded-lg">
-    <h2 class="text-gray-500 text-lg font-semibold pb-4">USERS</h2>
+    <div class="flex items-center justify-between">
+      <h2 class="text-gray-500 text-lg font-semibold pb-4">USERS</h2>
+      <!-- Add New User -->
+      <div class="text-right">
+        <button class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded">
+          Add New User
+        </button>
+      </div>
+
+    </div>
     <div class="max-h-[40rem] overflow-y-auto">
       <table class="w-full table-auto text-sm">
-      <thead>
-        <tr
-          class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-left">
-          <th v-for="(column, index) in tableColumns" :key="index">
-            {{ column }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="user in users" :key="user.id" class="hover:bg-grey-lighter">
-          <UserCard :user="user" />
-        </tr>
-      </tbody>
-    </table>
+        <thead>
+          <tr
+            class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-left">
+            <th v-for="(column, index) in tableColumns" :key="index">
+              {{ column }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in users" :key="user.id" class="hover:bg-grey-lighter">
+            <UserCard :user="user" />
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <!-- Add New User
-    <div class="text-right mt-4">
-      <button class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded">
-        Add New User
-      </button>
-    </div> -->
+
 
   </div>
   <!-- pagination -->
@@ -63,7 +67,9 @@
 import UserCard from '../components/User/UserCard.vue';
 import axios from 'axios';
 import { ref, } from 'vue';
-const accessToken = ref(localStorage.getItem('accessToken'));
+const accessToken = ref(localStorage.getItem('accessToken') ||'default') ;
+const bearerToken = accessToken.value.slice(1, -1)
+console.log(bearerToken);
 export default {
   name: 'ListUser',
   components: {
@@ -85,11 +91,10 @@ export default {
     axios.get('http://localhost:3000/users/get-users',
       {
         headers: {
-          Authorization: `Bearer ${accessToken.value.slice(1, -1)}`
+          Authorization: `Bearer ${bearerToken}`
         }
       })
       .then(response => {
-        console.log(response.data.users);
         this.users = response.data.users;
       })
       .catch(error => {
@@ -98,7 +103,9 @@ export default {
   },
 };
 </script>
-<style scoped>.container {
+<style scoped>
+.container {
   padding: 30px 0;
   margin: 0 auto;
-}</style>
+}
+</style>
